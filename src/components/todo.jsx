@@ -2,9 +2,11 @@ import { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { BiSolidTrash } from 'react-icons/bi'
 import { AiFillEdit } from 'react-icons/ai'
+import { useTodosContextData } from "../hooks/use-todos-context";
 import EditTodo from './edit-todo';
 
-const Todo = ({ todo, onRemoveTodo, onUpdateTodo }) => {
+const Todo = ({ todo }) => {
+    const { onUpdateTodo, onRemoveTodo } = useTodosContextData();
     const { id, value } = todo;
     const [editMode, setEditMode] = useState(false)
 
@@ -36,8 +38,6 @@ Todo.propTypes = {
         id: PropTypes.string.isRequired,
         value: PropTypes.string.isRequired,
     }).isRequired,
-    onRemoveTodo: PropTypes.func.isRequired,
-    onUpdateTodo: PropTypes.func.isRequired
 }
 
 export default Todo
