@@ -17,10 +17,10 @@ const EditTodo = ({ todo, onSave, undoChanges }) => {
 
     return (
         <form className="flex items-center" onSubmit={onSubmit}>
-            <input type="text" placeholder="Edit todo" value={value} className="border-b border-black-600 px-2 mr-2" onChange={onChange} />
+            <input type="text" placeholder="Edit todo" value={value} className="border-b border-black-600 px-2 mr-2" onChange={onChange} required />
             <div className='flex items-center gap-x-2'>
-                <FaUndo className="text-sm text-blue-600" onClick={undoChanges} />
-                <AiFillSave className="text-sm text-blue-600" onClick={() => onSave(value)} />
+                <FaUndo className="text-sm text-blue-600 cursor-pointer" onClick={undoChanges} />
+                <AiFillSave className="text-sm text-blue-600 cursor-pointer" onClick={() => onSave(value)} />
             </div>
         </form>
     )
