@@ -16,9 +16,9 @@ const EditTodo = ({ todo, onSave, undoChanges }) => {
     }
 
     return (
-        <form className="flex items-center" onSubmit={onSubmit}>
-            <input type="text" placeholder="Edit todo" value={value} className="border-b border-black-600 px-2 mr-2" onChange={onChange} required />
-            <div className='flex items-center gap-x-2'>
+        <form className="flex w-full justify-between items-center " onSubmit={onSubmit}>
+            <input type="text" placeholder="Edit todo" value={value} className="border-b border-black-600 md:px-2 md:mr-2 outline-todo-blue-4" onChange={onChange} required />
+            <div className='flex items-center gap-x-4'>
                 <FaUndo className="text-sm text-blue-600 cursor-pointer" onClick={undoChanges} />
                 <AiFillSave className="text-sm text-blue-600 cursor-pointer" onClick={() => onSave(value)} />
             </div>

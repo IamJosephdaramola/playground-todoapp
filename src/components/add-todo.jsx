@@ -18,11 +18,28 @@ const AddTodo = () => {
     }
 
     return (
-        <form className="flex items-center my-4" onSubmit={onSubmit}>
-            <input type="text" placeholder="Add todo" value={value} className="border border-black-600 px-2 py-1 rounded-md mr-4" onChange={onChange} required />
-            <button type="submit" className="rounded-md py-1 px-2 bg-blue-600 text-white">submit</button>
-        </form>
-    )
+        <div className="pt-28 md:pt-40 pb-10 grid place-items-center">
+            <h1 className="text-2xl font-bold my-10 text-center md:text-3xl px-10">
+                Let me be helpful with your todo list
+            </h1>
+            <form className="shadow-xl p-2 rounded-sm" onSubmit={onSubmit}>
+                <input
+                    type="text"
+                    placeholder="Add todo"
+                    value={value}
+                    className=" sm:px-2 py-1 rounded-md  outline-none w-40 sm:w-96"
+                    onChange={onChange}
+                    required
+                />
+                <button
+                    type="submit"
+                    className="rounded-md px-2 py-1 sm:px-8 bg-todo-blue-3 text-white"
+                >
+                    submit
+                </button>
+            </form>
+        </div>
+    );
 }
 
 export default AddTodo

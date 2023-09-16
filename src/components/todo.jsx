@@ -18,19 +18,32 @@ const Todo = ({ todo }) => {
     const undoChanges = () => setEditMode(false)
 
     return (
-        <li className='flex items-center gap-x-4'>
-            {editMode ? (
-                <EditTodo todo={todo} onSave={onSave} undoChanges={undoChanges} />
-            ) : (
-                <Fragment>
-                    <span>{value}</span>
-                    <AiFillEdit className='text-blue-600 text-sm cursor-pointer' onClick={() => setEditMode(true)} />
-                    <BiSolidTrash className='text-rose-700 text-sm cursor-pointer' onClick={() => onRemoveTodo(id)} />
-                </Fragment>
-            )}
-        </li>
-
-    )
+        <ul className="flex justify-center ">
+            <li className="flex justify-between items-center w-[65%] md:w-[38%] bg-todo-grey-2 font-semibold px-3 h-10 gap-x-4 mt-5">
+                {editMode ? (
+                    <EditTodo
+                        todo={todo}
+                        onSave={onSave}
+                        undoChanges={undoChanges}
+                    />
+                ) : (
+                    <Fragment>
+                        <span>{value}</span>
+                        <div className='flex gap-4'>
+                            <AiFillEdit
+                                className="text-blue-600 text-sm cursor-pointer"
+                                onClick={() => setEditMode(true)}
+                            />
+                            <BiSolidTrash
+                                className="text-rose-700 text-sm cursor-pointer"
+                                onClick={() => onRemoveTodo(id)}
+                            />
+                        </div>
+                    </Fragment>
+                )}
+            </li>
+        </ul>
+    );
 }
 
 Todo.propTypes = {
