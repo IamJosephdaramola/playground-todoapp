@@ -1,8 +1,9 @@
 import { useRoutes } from 'react-router-dom';
 import MainLayout from './layout/mainLayout';
-import { Home, Login, Signup, About, Error } from './pages';
+import { Home, Login, Signup, About, Error, VerifyEmail, ProtectedRoute } from './pages';
 
 const Router = () => {
+
     return useRoutes([
         {
             path: '/',
@@ -10,7 +11,7 @@ const Router = () => {
             children: [
                 {
                     path: '/',
-                    element: <Home />,
+                    element: <ProtectedRoute ><Home /></ProtectedRoute>,
                 },
                 {
                     path: '/about',
@@ -23,6 +24,10 @@ const Router = () => {
                 {
                     path: '/login',
                     element: <Login />,
+                },
+                {
+                    path: '/verify-email',
+                    element: <VerifyEmail />,
                 },
             ],
         },

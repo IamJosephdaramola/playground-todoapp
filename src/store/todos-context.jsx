@@ -1,12 +1,31 @@
 import { createContext, useState } from "react";
 import PropTypes from 'prop-types';
 import { nanoid } from "nanoid";
+import { supabase } from '../super-base-client';
 
 
 const todosContext = createContext({});
 
 const TodosProvider = ({ children }) => {
     const [todos, setTodos] = useState([]);
+    const [session, setSession] = useState(null)
+    const [authenticated, setAuthenticated] = useState(false)
+
+    const getSession = async () => {
+        const { data } = await supabase.auth.getSession()
+
+        if (data?.session) {
+            setSession(data.session)
+            setAuthenticated(!!data.session.access_token)
+        }
+    }
+
+    const logout = async () => {
+        await supabase.auth.signOut()
+
+        setSession(null);
+        setAuthenticated(false)
+    }
 
     const onAddTodo = (value) => {
         const newTodo = {
@@ -38,7 +57,7 @@ const TodosProvider = ({ children }) => {
     }
 
     return <todosContext.Provider
-        value={{ todos, onAddTodo, onRemoveTodo, onUpdateTodo }}
+        value={{ todos, onAddTodo, onRemoveTodo, onUpdateTodo, session, getSession, authenticated, logout }}
     >
         {children}
     </todosContext.Provider>

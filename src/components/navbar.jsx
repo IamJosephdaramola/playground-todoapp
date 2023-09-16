@@ -2,14 +2,22 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
+import { useTodosContextData } from '../hooks/use-todos-context';
 
 export default function Navbar() {
     const [showMenu, setShowMenu] = useState(false);
-    const navItems = [
+    const { authenticated, logout } = useTodosContextData();
+
+    const navItems = authenticated ? [
         {
             title: 'Home',
             link: '/',
         },
+        {
+            title: 'About',
+            link: 'about',
+        },
+    ] : [
         {
             title: 'About',
             link: 'about',
@@ -51,6 +59,7 @@ export default function Navbar() {
                     </div>
 
                     <div className="hidden md:flex items-center gap-5">
+
                         {navItems.map((item) => {
                             return (
                                 <NavLink
@@ -67,6 +76,7 @@ export default function Navbar() {
                                 </NavLink>
                             );
                         })}
+                        {authenticated && <button type='button' onClick={logout}>Logout</button>}
                     </div>
                 </div>
             </div>
