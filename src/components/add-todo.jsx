@@ -22,6 +22,7 @@ const AddTodo = () => {
             <h1 className="text-2xl font-bold my-10 text-center md:text-3xl px-10">
                 Let me be helpful with your todo list
             </h1>
+           
             <form className="shadow-xl p-2 rounded-sm" onSubmit={onSubmit}>
                 <input
                     type="text"
@@ -37,6 +38,7 @@ const AddTodo = () => {
                 >
                     submit
                 </button>
+                
             </form>
         </div>
     );

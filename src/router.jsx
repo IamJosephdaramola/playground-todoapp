@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import MainLayout from './layout/mainLayout';
-import { Home, Login, Signup, About } from './pages';
+import { Home, Login, Signup, About, Error } from './pages';
 
 const Router = () => {
     return useRoutes([
@@ -25,6 +25,10 @@ const Router = () => {
                     element: <Login />,
                 },
             ],
+        },
+        {
+            path: '*',
+            element: <Error />,
         },
     ]);
 };
