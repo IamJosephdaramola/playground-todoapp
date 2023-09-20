@@ -10,11 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.33.2",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
+<<<<<<< HEAD
     "react-router": "^6.16.0",
+=======
+>>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
