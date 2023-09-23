@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import { Link } from 'react-router-dom';
-import FormInput from '../components/formInput';
-import Button from '../components/button';
-
-const Signup = () => {
-    return (
-        <form className=" pt-28 flex justify-center  pb-5">
-=======
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import FormInput from '../components/formInput';
@@ -64,7 +55,6 @@ const Signup = () => {
     return (
         <form onSubmit={onSubmit} className=" pt-28 flex justify-center  pb-5">
 
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
             <div className="">
                 <div className="text-center">
                     <h2 className="text-[#000] mb-2 text-xl sm:text-[35px] font-bold">
@@ -80,22 +70,6 @@ const Signup = () => {
                         </Link>
                     </p>
                 </div>
-<<<<<<< HEAD
-                <FormInput
-                    label="Name"
-                    name="Name"
-                    placeholder="Enter your name"
-                />
-                <FormInput
-                    label="Email"
-                    name="Email"
-                    placeholder="Enter your name"
-                />{' '}
-                <FormInput
-                    label="Password"
-                    name="Password"
-                    placeholder="Enter your name"
-=======
                 {formError && <p className='text-center text-red-600 my-4'>{formError}</p>}
                 <FormInput
                     label="Email"
@@ -112,18 +86,14 @@ const Signup = () => {
                     onChange={onChange}
                     isRequired
                     type="password"
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
                 />
                 <FormInput
                     label="Confirm Password"
                     name="confirmPassword"
                     placeholder="Enter your name"
-<<<<<<< HEAD
-=======
                     onChange={onChange}
                     isRequired
                     type="password"
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
                 />
                 <div className="grid justify-center sm:justify-start">
                     <Button text="Sign Up" />

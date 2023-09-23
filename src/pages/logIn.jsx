@@ -1,11 +1,51 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { FormInput } from '../components';
 import Button from '../components/button';
+import { useTodosContextData } from '../hooks/use-todos-context';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useTodosContextData();
+    const [details, setDetails] = useState({
+        email: '',
+        password: '',
+    });
+    const [errorMsg, setErrorMsg] = useState('');
+    const onChange = (e) => {
+        setDetails({
+            ...details,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handleSubmit = async (e) => {
+        const { password, email } = details;
+        e.preventDefault();
+        try {
+            if (!password || !email) {
+                setErrorMsg('Please fill in the fields');
+                return;
+            }
+            const {
+                data: { user, session },
+                error,
+            } = await login(email, password);
+            if (error) setErrorMsg(error.message);
+            if (user && session) navigate('/');
+        } catch (error) {
+            setErrorMsg('Email or Password Incorrect');
+        }
+    };
+   
     return (
-        <form className="pt-40 flex justify-center  pb-5">
+        <form
+            onSubmit={handleSubmit}
+            className="pt-40 flex justify-center  pb-5"
+        >
             <div className="">
+                {errorMsg && (
+                    <p className="text-center text-red-600 my-4">{errorMsg}</p>
+                )}
                 <div className="text-center">
                     <h2 className="text-[#000] mb-2 text-xl sm:text-[35px] font-bold">
                         Login to your account
@@ -16,13 +56,19 @@ const Login = () => {
                 </div>
                 <FormInput
                     label="Email"
-                    name="Email"
+                    name="email"
                     placeholder="Enter your name"
+                    onChange={onChange}
+                    type="email"
+                    isRequired
                 />{' '}
                 <FormInput
                     label="Password"
-                    name="Password"
+                    name="password"
                     placeholder="Enter your name"
+                    onChange={onChange}
+                    type="password"
+                    isRequired
                 />
                 <div className="grid justify-center sm:justify-start">
                     <Button text=" Login" />

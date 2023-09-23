@@ -2,12 +2,6 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
-<<<<<<< HEAD
-
-export default function Navbar() {
-    const [showMenu, setShowMenu] = useState(false);
-    const navItems = [
-=======
 import { useTodosContextData } from '../hooks/use-todos-context';
 
 export default function Navbar() {
@@ -15,7 +9,6 @@ export default function Navbar() {
     const { authenticated, logout } = useTodosContextData();
 
     const navItems = authenticated ? [
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
         {
             title: 'Home',
             link: '/',
@@ -24,14 +17,11 @@ export default function Navbar() {
             title: 'About',
             link: 'about',
         },
-<<<<<<< HEAD
-=======
     ] : [
         {
             title: 'About',
             link: 'about',
         },
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
         {
             title: 'Sign Up',
             link: 'signup',
@@ -69,10 +59,6 @@ export default function Navbar() {
                     </div>
 
                     <div className="hidden md:flex items-center gap-5">
-<<<<<<< HEAD
-=======
-
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
                         {navItems.map((item) => {
                             return (
                                 <NavLink
@@ -89,10 +75,7 @@ export default function Navbar() {
                                 </NavLink>
                             );
                         })}
-<<<<<<< HEAD
-=======
                         {authenticated && <button type='button' onClick={logout}>Logout</button>}
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
                     </div>
                 </div>
             </div>

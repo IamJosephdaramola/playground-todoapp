@@ -12,10 +12,6 @@ const Button = ({ text }) => {
 };
 
 Button.propTypes = {
-<<<<<<< HEAD
-    text: PropTypes.func.isRequired,
-=======
     text: PropTypes.string.isRequired,
->>>>>>> 593acf49092be174e4a1b4cf0949c509e27d4a05
 };
 export default Button;

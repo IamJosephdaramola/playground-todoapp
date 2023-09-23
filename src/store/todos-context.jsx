@@ -1,75 +1,102 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 import { supabase } from '../super-base-client';
-
 
 const todosContext = createContext({});
 
 const TodosProvider = ({ children }) => {
     const [todos, setTodos] = useState([]);
-    const [session, setSession] = useState(null)
-    const [authenticated, setAuthenticated] = useState(false)
+    const [session, setSession] = useState(null);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const { data } = supabase.auth.onAuthStateChange((event, sess) => {
+            if (event === 'SIGNED_IN') {
+                setUser(sess.user);
+                setAuthenticated(true);
+            } else if (event === 'SIGNED_OUT') {
+                setUser(null);
+                setAuthenticated(false);
+            }
+        });
+        return () => {
+            data.subscription.unsubscribe();
+        };
+    }, []);
 
     const getSession = async () => {
-        const { data } = await supabase.auth.getSession()
+        const { data } = await supabase.auth.getSession();
 
         if (data?.session) {
-            setSession(data.session)
-            setAuthenticated(!!data.session.access_token)
+            setSession(data.session);
+            setAuthenticated(!!data.session.access_token);
         }
-    }
+    };
+    const login = (email, password) =>
+        supabase.auth.signInWithPassword({ email, password });
 
     const logout = async () => {
-        await supabase.auth.signOut()
+        await supabase.auth.signOut();
 
         setSession(null);
-        setAuthenticated(false)
-    }
+        setAuthenticated(false);
+    };
 
     const onAddTodo = (value) => {
         const newTodo = {
             id: nanoid(),
-            value
-        }
-        setTodos([newTodo, ...todos])
-    }
+            value,
+        };
+        setTodos([newTodo, ...todos]);
+    };
 
     const onRemoveTodo = (id) => {
-        const updatedTodos = todos.filter((todo => todo.id !== id));
-        setTodos(updatedTodos)
-    }
+        const updatedTodos = todos.filter((todo) => todo.id !== id);
+        setTodos(updatedTodos);
+    };
 
     const onUpdateTodo = (id, newValue) => {
-        let updatedTodos = [...todos]
+        let updatedTodos = [...todos];
 
         updatedTodos = updatedTodos.map((todo) => {
             if (todo.id === id) {
                 return {
                     ...todo,
-                    value: newValue
-                }
+                    value: newValue,
+                };
             }
-            return todo
-        })
+            return todo;
+        });
 
-        setTodos(updatedTodos)
-    }
+        setTodos(updatedTodos);
+    };
 
-    return <todosContext.Provider
-        value={{ todos, onAddTodo, onRemoveTodo, onUpdateTodo, session, getSession, authenticated, logout }}
-    >
-        {children}
-    </todosContext.Provider>
-
-}
+    return (
+        <todosContext.Provider
+            value={{
+                todos,
+                onAddTodo,
+                onRemoveTodo,
+                onUpdateTodo,
+                session,
+                getSession,
+                authenticated,
+                logout,
+                login,
+                user,
+            }}
+        >
+            {children}
+        </todosContext.Provider>
+    );
+};
 TodosProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]).isRequired
-}
+        PropTypes.node,
+    ]).isRequired,
+};
 
-
-
-export { todosContext, TodosProvider }
+export { todosContext, TodosProvider };
