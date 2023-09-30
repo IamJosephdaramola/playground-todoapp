@@ -1,24 +1,35 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { supabase } from '../super-base-client';
+import reducer from './reducer';
+import {
+    LOGIN,
+    LOG_OUT,
+    ON_ADD_TODO,
+    ON_REMOVE_TODO,
+    ON_UPDATE_TODO,
+    GET_SESSION,
+} from './action';
 
 const todosContext = createContext({});
 
 const TodosProvider = ({ children }) => {
-    const [todos, setTodos] = useState([]);
-    const [session, setSession] = useState(null);
-    const [authenticated, setAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
+    const initialState = {
+        todos: [],
+        session: null,
+        authenticated: false,
+        user: null,
+    };
+
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         const { data } = supabase.auth.onAuthStateChange((event, sess) => {
             if (event === 'SIGNED_IN') {
-                setUser(sess.user);
-                setAuthenticated(true);
+                dispatch({ type: LOGIN, payload: { session: sess } });
             } else if (event === 'SIGNED_OUT') {
-                setUser(null);
-                setAuthenticated(false);
+                dispatch({ type: LOG_OUT });
             }
         });
         return () => {
@@ -30,18 +41,21 @@ const TodosProvider = ({ children }) => {
         const { data } = await supabase.auth.getSession();
 
         if (data?.session) {
-            setSession(data.session);
-            setAuthenticated(!!data.session.access_token);
+            dispatch({ type: GET_SESSION, payload: { session: data.session } });
         }
     };
-    const login = (email, password) =>
-        supabase.auth.signInWithPassword({ email, password });
+
+    const login = async (email, password) => {
+        const { session, user } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        dispatch({ type: LOGIN, payload: { session, user } });
+    };
 
     const logout = async () => {
         await supabase.auth.signOut();
-
-        setSession(null);
-        setAuthenticated(false);
+        dispatch({ type: LOG_OUT });
     };
 
     const onAddTodo = (value) => {
@@ -49,43 +63,27 @@ const TodosProvider = ({ children }) => {
             id: nanoid(),
             value,
         };
-        setTodos([newTodo, ...todos]);
+        dispatch({ type: ON_ADD_TODO, payload: { todo: newTodo } });
     };
 
     const onRemoveTodo = (id) => {
-        const updatedTodos = todos.filter((todo) => todo.id !== id);
-        setTodos(updatedTodos);
+        dispatch({ type: ON_REMOVE_TODO, payload: { id } });
     };
 
     const onUpdateTodo = (id, newValue) => {
-        let updatedTodos = [...todos];
-
-        updatedTodos = updatedTodos.map((todo) => {
-            if (todo.id === id) {
-                return {
-                    ...todo,
-                    value: newValue,
-                };
-            }
-            return todo;
-        });
-
-        setTodos(updatedTodos);
+        dispatch({ type: ON_UPDATE_TODO, payload: { id, newValue } });
     };
 
     return (
         <todosContext.Provider
             value={{
-                todos,
+                ...state,
+                getSession,
+                logout,
+                login,
                 onAddTodo,
                 onRemoveTodo,
                 onUpdateTodo,
-                session,
-                getSession,
-                authenticated,
-                logout,
-                login,
-                user,
             }}
         >
             {children}

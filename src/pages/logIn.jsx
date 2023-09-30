@@ -36,7 +36,7 @@ const Login = () => {
             setErrorMsg('Email or Password Incorrect');
         }
     };
-   
+
     return (
         <form
             onSubmit={handleSubmit}
