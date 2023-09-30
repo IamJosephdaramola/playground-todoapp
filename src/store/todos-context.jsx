@@ -1,63 +1,74 @@
 import { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 import { supabase } from '../super-base-client';
+import { useAuthContextData } from '../hooks';
 
 const todosContext = createContext({});
 
 const TodosProvider = ({ children }) => {
+    const { user } = useAuthContextData()
     const [todos, setTodos] = useState([]);
-    const [session, setSession] = useState(null);
-    const [authenticated, setAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
+
+    const fetchTodos = async () => {
+        if (!user) return;
+
+        const { data } = await supabase.from('todos').select('*').eq('user_id', user.id);
+
+        if (data) {
+            setTodos(data)
+        }
+    }
 
     useEffect(() => {
-        const { data } = supabase.auth.onAuthStateChange((event, sess) => {
-            if (event === 'SIGNED_IN') {
-                setUser(sess.user);
-                setAuthenticated(true);
-            } else if (event === 'SIGNED_OUT') {
-                setUser(null);
-                setAuthenticated(false);
-            }
-        });
-        return () => {
-            data.subscription.unsubscribe();
+        if (user) {
+            fetchTodos()
+        }
+    }, [user])
+
+    const onAddTodo = async (value) => {
+        const newTodo = {
+            value,
+            user_id: user?.id
         };
-    }, []);
 
-    const getSession = async () => {
-        const { data } = await supabase.auth.getSession();
+        const { data, error } = await supabase.from('todos').insert(newTodo).select();
 
-        if (data?.session) {
-            setSession(data.session);
-            setAuthenticated(!!data.session.access_token);
+        if (error) {
+            //    implement custom alert
+            return;
+        }
+
+        if (data) {
+            setTodos([...data, ...todos]);
         }
     };
-    const login = (email, password) =>
-        supabase.auth.signInWithPassword({ email, password });
 
-    const logout = async () => {
-        await supabase.auth.signOut();
+    const onRemoveTodo = async (id) => {
+        const { error } = await supabase.from('todos').delete().eq('id', id);
 
-        setSession(null);
-        setAuthenticated(false);
-    };
+        if (error) {
+            // custom error message
+            return;
+        }
 
-    const onAddTodo = (value) => {
-        const newTodo = {
-            id: nanoid(),
-            value,
-        };
-        setTodos([newTodo, ...todos]);
-    };
-
-    const onRemoveTodo = (id) => {
         const updatedTodos = todos.filter((todo) => todo.id !== id);
         setTodos(updatedTodos);
+
     };
 
-    const onUpdateTodo = (id, newValue) => {
+    const onUpdateTodo = async (id, newValue) => {
+
+        const { error } = await supabase
+            .from('todos')
+            .update({ 'value': newValue })
+            .eq('id', id)
+            .select()
+
+        if (error) {
+            // custom error message
+            return;
+        }
+
         let updatedTodos = [...todos];
 
         updatedTodos = updatedTodos.map((todo) => {
@@ -80,12 +91,6 @@ const TodosProvider = ({ children }) => {
                 onAddTodo,
                 onRemoveTodo,
                 onUpdateTodo,
-                session,
-                getSession,
-                authenticated,
-                logout,
-                login,
-                user,
             }}
         >
             {children}

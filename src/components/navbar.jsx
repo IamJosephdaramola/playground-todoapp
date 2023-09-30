@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
-import { useTodosContextData } from '../hooks/use-todos-context';
+import { useAuthContextData } from '../hooks';
 
 export default function Navbar() {
     const [showMenu, setShowMenu] = useState(false);
-    const { authenticated, logout } = useTodosContextData();
+    const { authenticated, logout } = useAuthContextData();
 
     const navItems = authenticated ? [
         {

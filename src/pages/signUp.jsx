@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate, } from 'react-router-dom';
 import FormInput from '../components/formInput';
 import Button from '../components/button';
 import { supabase } from '../super-base-client';
@@ -13,9 +13,11 @@ const Signup = () => {
         confirmPassword: '',
     })
 
-    useEffect(() => {
-        setFormError('')
-    }, [details])
+    const onFocus = () => {
+        if (formError) {
+            setFormError('')
+        }
+    }
 
     const onChange = (e) => {
         setDetails({
@@ -76,6 +78,7 @@ const Signup = () => {
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
+                    onFocus={onFocus}
                     isRequired
                     type="email"
                 />{' '}
@@ -86,6 +89,8 @@ const Signup = () => {
                     onChange={onChange}
                     isRequired
                     type="password"
+                    onFocus={onFocus}
+
                 />
                 <FormInput
                     label="Confirm Password"
@@ -94,6 +99,7 @@ const Signup = () => {
                     onChange={onChange}
                     isRequired
                     type="password"
+                    onFocus={onFocus}
                 />
                 <div className="grid justify-center sm:justify-start">
                     <Button text="Sign Up" />
