@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { useTodosContextData } from "../hooks/use-todos-context";
+import { useTodosContextData, useAuthContextData } from "../hooks";
 
 
 const AddTodo = () => {
-    const { onAddTodo, user } = useTodosContextData();
+    const { onAddTodo } = useTodosContextData();
+    const { user } = useAuthContextData()
     const [value, setValue] = useState('');
 
     const onSubmit = (e) => {
@@ -21,7 +22,7 @@ const AddTodo = () => {
         <div className="pt-28 md:pt-40 grid place-items-center">
             <h2 className="text-center ">
                 You are logged in and your email address is{' '}
-                <span className="font-medium">{user.email}</span>
+                <span className="font-medium">{user?.email}</span>
             </h2>
             <h1 className="text-2xl font-bold my-10 text-center md:text-3xl px-10">
                 Let me be helpful with your todo list

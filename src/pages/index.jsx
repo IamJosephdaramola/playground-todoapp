@@ -5,5 +5,6 @@ import About from './about';
 import Error from './error';
 import VerifyEmail from './verify-email';
 import ProtectedRoute from './protected-route';
+import AuthRoute from './auth-route';
 
-export { Home, Login, Signup, About, Error, VerifyEmail, ProtectedRoute };
+export { Home, Login, Signup, About, Error, VerifyEmail, ProtectedRoute, AuthRoute };

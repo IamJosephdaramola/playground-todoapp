@@ -2,7 +2,7 @@ import { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { BiSolidTrash } from 'react-icons/bi'
 import { AiFillEdit } from 'react-icons/ai'
-import { useTodosContextData } from "../hooks/use-todos-context";
+import { useTodosContextData } from "../hooks";
 import EditTodo from './edit-todo';
 
 const Todo = ({ todo }) => {

@@ -10,7 +10,7 @@ const VerifyEmail = () => {
             <div className="text-center w-72 p-5 sm:w-96 sm:p-14 rounded-lg shadow-md border-t-4 border-todo-blue-3" >
                 <h2 className='text-xl font-medium mb-3'>Verify Your Email Address</h2>
                 <p className="">
-                    A verification link has been sent to {location.state.email}
+                    A verification link has been sent to {location?.state?.email}
                 </p>
             </div>
         </div>

@@ -2,39 +2,49 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FormInput } from '../components';
 import Button from '../components/button';
-import { useTodosContextData } from '../hooks/use-todos-context';
+import { useAuthContextData } from '../hooks';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { login } = useTodosContextData();
+    const { login } = useAuthContextData();
     const [details, setDetails] = useState({
         email: '',
         password: '',
     });
     const [errorMsg, setErrorMsg] = useState('');
+
+    const onFocus = () => {
+        if (errorMsg) {
+            setErrorMsg('')
+        }
+    }
+
     const onChange = (e) => {
         setDetails({
             ...details,
             [e.target.name]: e.target.value,
         });
     };
+
     const handleSubmit = async (e) => {
         const { password, email } = details;
         e.preventDefault();
-        try {
+
             if (!password || !email) {
                 setErrorMsg('Please fill in the fields');
                 return;
             }
-            const {
-                data: { user, session },
+        const {
                 error,
             } = await login(email, password);
-            if (error) setErrorMsg(error.message);
-            if (user && session) navigate('/');
-        } catch (error) {
-            setErrorMsg('Email or Password Incorrect');
+
+        if (error) {
+            setErrorMsg(error.message);
+            return;
         }
+
+        navigate('/');
+
     };
    
     return (
@@ -59,6 +69,7 @@ const Login = () => {
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
+                    onFocus={onFocus}
                     type="email"
                     isRequired
                 />{' '}
@@ -67,6 +78,7 @@ const Login = () => {
                     name="password"
                     placeholder="Enter your name"
                     onChange={onChange}
+                    onFocus={onFocus}
                     type="password"
                     isRequired
                 />
@@ -75,7 +87,7 @@ const Login = () => {
                 </div>
                 <div>
                     <p className="text-todo-blue-2 text-center pt-5 font-[500] text-sm sm:text-[16px]">
-                        Don't have an account?
+                        Don&apos;t have an account?
                         <Link
                             to="/signup"
                             className="text-bg-todo-blue-2 pl-1 font-[500]  underline underline-offset-2"

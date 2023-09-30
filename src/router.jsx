@@ -8,6 +8,7 @@ import {
     Error,
     VerifyEmail,
     ProtectedRoute,
+    AuthRoute
 } from './pages';
 
 const Router = () => {
@@ -30,15 +31,27 @@ const Router = () => {
                 },
                 {
                     path: '/signup',
-                    element: <Signup />,
+                    element:
+                        <AuthRoute>
+                            <Signup />
+                        </AuthRoute>
+                    ,
                 },
                 {
                     path: '/login',
-                    element: <Login />,
+                    element:
+                        <AuthRoute>
+                            <Login />
+                        </AuthRoute>
+                    ,
                 },
                 {
                     path: '/verify-email',
-                    element: <VerifyEmail />,
+                    element:
+                        <AuthRoute>
+                            <VerifyEmail />
+                        </AuthRoute>
+                    ,
                 },
             ],
         },
