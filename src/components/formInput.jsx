@@ -15,7 +15,7 @@ const FormInput = ({ label, name, placeholder, className, isRequired, onChange, 
                     type={type}
                     name={name}
                     placeholder={placeholder}
-                    className="border-2 placeholder:pl-3 py-2 w-[250px] sm:w-[478px] outline-none rounded-[4px]"
+                    className="border-2 pl-2 py-2 w-[250px] sm:w-[478px] outline-none rounded-[4px]"
                     required={isRequired}
                     onChange={onChange}
                 />

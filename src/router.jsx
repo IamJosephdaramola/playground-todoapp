@@ -1,9 +1,16 @@
 import { useRoutes } from 'react-router-dom';
 import MainLayout from './layout/mainLayout';
-import { Home, Login, Signup, About, Error, VerifyEmail, ProtectedRoute } from './pages';
+import {
+    Home,
+    Login,
+    Signup,
+    About,
+    Error,
+    VerifyEmail,
+    ProtectedRoute,
+} from './pages';
 
 const Router = () => {
-
     return useRoutes([
         {
             path: '/',
@@ -11,7 +18,11 @@ const Router = () => {
             children: [
                 {
                     path: '/',
-                    element: <ProtectedRoute ><Home /></ProtectedRoute>,
+                    element: (
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    ),
                 },
                 {
                     path: '/about',

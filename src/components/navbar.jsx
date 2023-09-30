@@ -59,7 +59,6 @@ export default function Navbar() {
                     </div>
 
                     <div className="hidden md:flex items-center gap-5">
-
                         {navItems.map((item) => {
                             return (
                                 <NavLink
