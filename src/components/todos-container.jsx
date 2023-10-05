@@ -1,5 +1,5 @@
 import Todo from "./todo";
-import { useTodosContextData } from "../hooks/use-todos-context";
+import { useTodosContextData } from "../hooks";
 
 const TodosContainer = () => {
     const { todos } = useTodosContextData()

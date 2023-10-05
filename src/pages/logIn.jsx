@@ -2,30 +2,57 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FormInput } from '../components';
 import Button from '../components/button';
+<<<<<<< HEAD
 import { useTodosContextData } from '../hooks/use-todos-context';
 
 const Login = () => {
     const navigate = useNavigate();
     const { login } = useTodosContextData();
+=======
+import { useAuthContextData } from '../hooks';
+
+const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useAuthContextData();
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
     const [details, setDetails] = useState({
         email: '',
         password: '',
     });
     const [errorMsg, setErrorMsg] = useState('');
+<<<<<<< HEAD
+=======
+
+    const onFocus = () => {
+        if (errorMsg) {
+            setErrorMsg('')
+        }
+    }
+
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
     const onChange = (e) => {
         setDetails({
             ...details,
             [e.target.name]: e.target.value,
         });
     };
+<<<<<<< HEAD
     const handleSubmit = async (e) => {
         const { password, email } = details;
         e.preventDefault();
         try {
+=======
+
+    const handleSubmit = async (e) => {
+        const { password, email } = details;
+        e.preventDefault();
+
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
             if (!password || !email) {
                 setErrorMsg('Please fill in the fields');
                 return;
             }
+<<<<<<< HEAD
             const {
                 data: { user, session },
                 error,
@@ -35,6 +62,19 @@ const Login = () => {
         } catch (error) {
             setErrorMsg('Email or Password Incorrect');
         }
+=======
+        const {
+                error,
+            } = await login(email, password);
+
+        if (error) {
+            setErrorMsg(error.message);
+            return;
+        }
+
+        navigate('/');
+
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
     };
    
     return (
@@ -59,6 +99,10 @@ const Login = () => {
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
+<<<<<<< HEAD
+=======
+                    onFocus={onFocus}
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
                     type="email"
                     isRequired
                 />{' '}
@@ -67,6 +111,10 @@ const Login = () => {
                     name="password"
                     placeholder="Enter your name"
                     onChange={onChange}
+<<<<<<< HEAD
+=======
+                    onFocus={onFocus}
+>>>>>>> 397e5c3b7db545743babd8ebec9a25ff03a0b86c
                     type="password"
                     isRequired
                 />
@@ -75,7 +123,7 @@ const Login = () => {
                 </div>
                 <div>
                     <p className="text-todo-blue-2 text-center pt-5 font-[500] text-sm sm:text-[16px]">
-                        Don't have an account?
+                        Don&apos;t have an account?
                         <Link
                             to="/signup"
                             className="text-bg-todo-blue-2 pl-1 font-[500]  underline underline-offset-2"
