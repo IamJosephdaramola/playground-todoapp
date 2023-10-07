@@ -6,6 +6,7 @@ import { useTodosContextData } from "../hooks";
 import EditTodo from './edit-todo';
 
 const Todo = ({ todo }) => {
+
     const { onUpdateTodo, onRemoveTodo } = useTodosContextData();
     const { id, value } = todo;
     const [editMode, setEditMode] = useState(false)

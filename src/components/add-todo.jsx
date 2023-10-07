@@ -20,7 +20,7 @@ const AddTodo = () => {
 
     return (
         <div className="pt-28 md:pt-40 grid place-items-center">
-            <h2 className="text-center ">
+            <h2 className="text-center px-5 sm:px-0">
                 You are logged in and your email address is{' '}
                 <span className="font-medium">{user?.email}</span>
             </h2>

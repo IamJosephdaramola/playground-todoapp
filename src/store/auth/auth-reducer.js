@@ -17,7 +17,7 @@ const authReducer = (state, action) => {
         case actionTypes.GET_SESSION:
             return {
                 ...state,
-                user: action.payload.session.user,
+                user: action.payload.session.user ,
                 authenticated: !!action.payload.session.access_token
             }
         case actionTypes.LOGOUT:

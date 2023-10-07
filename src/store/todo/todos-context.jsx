@@ -1,37 +1,47 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase } from '../super-base-client';
-import { useAuthContextData } from '../hooks';
+import { useAuthContextData } from '../../hooks';
+import { supabase } from '../../super-base-client';
+import { todoReducer, initialState, actionTypes } from './todos-reducer';
 
 const todosContext = createContext({});
 
 const TodosProvider = ({ children }) => {
-    const { user } = useAuthContextData()
-    const [todos, setTodos] = useState([]);
+    const { user } = useAuthContextData();
+    const [state, dispatch] = useReducer(todoReducer, initialState);
 
     const fetchTodos = async () => {
         if (!user) return;
 
-        const { data } = await supabase.from('todos').select('*').eq('user_id', user.id);
+        const { data } = await supabase
+            .from('todos')
+            .select('*')
+            .eq('user_id', user.id);
 
         if (data) {
-            setTodos(data)
+            dispatch({
+                type: actionTypes.SET_TODO,
+                payload: { data },
+            });
         }
-    }
+    };
 
     useEffect(() => {
         if (user) {
-            fetchTodos()
+            fetchTodos();
         }
-    }, [user])
+    }, [user]);
 
     const onAddTodo = async (value) => {
         const newTodo = {
             value,
-            user_id: user?.id
+            user_id: user?.id,
         };
 
-        const { data, error } = await supabase.from('todos').insert(newTodo).select();
+        const { data, error } = await supabase
+            .from('todos')
+            .insert(newTodo)
+            .select();
 
         if (error) {
             //    implement custom alert
@@ -39,7 +49,7 @@ const TodosProvider = ({ children }) => {
         }
 
         if (data) {
-            setTodos([...data, ...todos]);
+            dispatch({ type: actionTypes.ADD_TODOS, payload: data });
         }
     };
 
@@ -50,44 +60,31 @@ const TodosProvider = ({ children }) => {
             // custom error message
             return;
         }
-
-        const updatedTodos = todos.filter((todo) => todo.id !== id);
-        setTodos(updatedTodos);
-
+        dispatch({ type: actionTypes.REMOVE_TODO, payload: { id } });
+       
     };
 
     const onUpdateTodo = async (id, newValue) => {
-
         const { error } = await supabase
             .from('todos')
-            .update({ 'value': newValue })
+            .update({ value: newValue })
             .eq('id', id)
-            .select()
+            .select();
 
         if (error) {
             // custom error message
             return;
         }
-
-        let updatedTodos = [...todos];
-
-        updatedTodos = updatedTodos.map((todo) => {
-            if (todo.id === id) {
-                return {
-                    ...todo,
-                    value: newValue,
-                };
-            }
-            return todo;
+        dispatch({
+            type: actionTypes.UPDATE_TODO,
+            payload: { id, newValue },
         });
-
-        setTodos(updatedTodos);
     };
 
     return (
         <todosContext.Provider
             value={{
-                todos,
+                todos: state.todos,
                 onAddTodo,
                 onRemoveTodo,
                 onUpdateTodo,
