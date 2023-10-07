@@ -8,29 +8,31 @@ export default function Navbar() {
     const [showMenu, setShowMenu] = useState(false);
     const { authenticated, logout } = useAuthContextData();
 
-    const navItems = authenticated ? [
-        {
-            title: 'Home',
-            link: '/',
-        },
-        {
-            title: 'About',
-            link: 'about',
-        },
-    ] : [
-        {
-            title: 'About',
-            link: 'about',
-        },
-        {
-            title: 'Sign Up',
-            link: 'signup',
-        },
-        {
-            title: 'Login',
-            link: 'login',
-        },
-    ];
+    const navItems = authenticated
+        ? [
+              {
+                  title: 'Home',
+                  link: '/',
+              },
+              {
+                  title: 'About',
+                  link: 'about',
+              },
+          ]
+        : [
+              {
+                  title: 'About',
+                  link: 'about',
+              },
+              {
+                  title: 'Sign Up',
+                  link: 'signup',
+              },
+              {
+                  title: 'Login',
+                  link: 'login',
+              },
+          ];
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -64,7 +66,6 @@ export default function Navbar() {
                                 <NavLink
                                     key={item.title}
                                     to={item.link}
-                                    
                                     className={({ isActive }) =>
                                         isActive
                                             ? 'text-todo-blue-2 px-6 py-1 md:px-4  font-medium  md:text-[16px]'
@@ -75,7 +76,11 @@ export default function Navbar() {
                                 </NavLink>
                             );
                         })}
-                        {authenticated && <button type='button' onClick={logout}>Logout</button>}
+                        {authenticated && (
+                            <button type="button" onClick={logout}>
+                                Logout
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -115,6 +120,15 @@ export default function Navbar() {
                                 </NavLink>
                             );
                         })}
+                        {authenticated && (
+                            <button
+                                className="text-[18px]  px-2  text-todo-black"
+                                type="button"
+                                onClick={logout}
+                            >
+                                Logout
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

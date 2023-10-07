@@ -6,24 +6,29 @@ import { authReducer, initialState, actionTypes } from './auth-reducer';
 const authContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(authReducer, initialState)
+    const [state, dispatch] = useReducer(authReducer, initialState);
 
     const getSession = async () => {
         const { data } = await supabase.auth.getSession();
 
         if (data?.session) {
-
-            dispatch({ type: actionTypes.GET_SESSION, payload: { session: data.session } })
+            dispatch({
+                type: actionTypes.GET_SESSION,
+                payload: { session: data.session },
+            });
         }
     };
 
     useEffect(() => {
-        getSession()
+        getSession();
         const { data } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN') {
-                dispatch({ type: actionTypes.GET_SESSION, payload: { session } })
+                dispatch({
+                    type: actionTypes.GET_SESSION,
+                    payload: { session },
+                });
             } else if (event === 'SIGNED_OUT') {
-                dispatch({ type: actionTypes.LOGOUT })
+                dispatch({ type: actionTypes.LOGOUT });
             }
         });
         return () => {
@@ -31,21 +36,31 @@ const AuthProvider = ({ children }) => {
         };
     }, []);
 
+   const login = async (email, password) => {
+       const { data, error } = await supabase.auth.signInWithPassword({
+           email,
+           password,
+       });
 
-    const login = async (email, password) => {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+       if (error) {
+           return { error };
+       }
 
-        if (data) {
-            dispatch({ type: actionTypes.GET_SESSION, payload: { session: data.session } })
-        }
+       if (data) {
+           dispatch({
+               type: actionTypes.GET_SESSION,
+               payload: { session: data.session },
+           });
+       }
 
-        return { error }
-    }
+       return {};
+   };
+
 
     const logout = async () => {
         await supabase.auth.signOut();
 
-        dispatch({ type: actionTypes.LOGOUT })
+        dispatch({ type: actionTypes.LOGOUT });
     };
 
     return (
@@ -57,10 +72,11 @@ const AuthProvider = ({ children }) => {
                 login,
                 user: state.user,
             }}
-        >{children}</authContext.Provider>
-    )
-
-}
+        >
+            {children}
+        </authContext.Provider>
+    );
+};
 
 AuthProvider.propTypes = {
     children: PropTypes.oneOfType([
@@ -69,4 +85,4 @@ AuthProvider.propTypes = {
     ]).isRequired,
 };
 
-export { authContext, AuthProvider }
+export { authContext, AuthProvider };

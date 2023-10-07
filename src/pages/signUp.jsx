@@ -1,62 +1,67 @@
 import { useState } from 'react';
-import { Link, useNavigate, } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import FormInput from '../components/formInput';
 import Button from '../components/button';
 import { supabase } from '../super-base-client';
 
 const Signup = () => {
-    const navigate = useNavigate()
-    const [formError, setFormError] = useState('')
+    const navigate = useNavigate();
+    const [formError, setFormError] = useState('');
     const [details, setDetails] = useState({
         email: '',
         password: '',
         confirmPassword: '',
-    })
+    });
 
     const onFocus = () => {
         if (formError) {
-            setFormError('')
+            setFormError('');
         }
-    }
+    };
 
     const onChange = (e) => {
         setDetails({
             ...details,
-            [e.target.name]: e.target.value
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
+   
     const onSubmit = async (e) => {
-        const { password, confirmPassword, email } = details
-        e.preventDefault()
+        e.preventDefault();
+        const { password, confirmPassword, email } = details;
+        if (!email || !password || !confirmPassword) {
+            toast.error('Please fill in all fields');
+            return;
+        }
         if (confirmPassword !== password) {
-            setFormError('passwords do not match');
+            toast.error('Passwords do not match');
             return;
         }
-
         if (password.length < 6) {
-            setFormError('Password is too weak')
+            toast.error('Password is too weak (min. 6 characters)');
             return;
         }
-
         const { data, error } = await supabase.auth.signUp({
-            email, password, options: {
-                emailRedirectTo: `${document.location.origin}/`
-            }
+            email,
+            password,
+            options: {
+                emailRedirectTo: `${document.location.origin}/`,
+            },
         });
 
         if (error) {
-
-            setFormError('something went wrong');
-            return
+            toast.error(error.message);
+            return;
         }
 
-        navigate('/verify-email', { state: { email: data.user.email } })
-    }
+        navigate('/verify-email', { state: { email: data.user.email } });
+        toast.success('Account created successfully');
+    };
 
     return (
         <form onSubmit={onSubmit} className=" pt-28 flex justify-center  pb-5">
-
             <div className="">
                 <div className="text-center">
                     <h2 className="text-[#000] mb-2 text-xl sm:text-[35px] font-bold">
@@ -72,14 +77,16 @@ const Signup = () => {
                         </Link>
                     </p>
                 </div>
-                {formError && <p className='text-center text-red-600 my-4'>{formError}</p>}
+                {formError && (
+                    <p className="text-center text-red-600 my-4">{formError}</p>
+                )}
                 <FormInput
                     label="Email"
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
                     onFocus={onFocus}
-                    isRequired
+                    // isRequired
                     type="email"
                 />{' '}
                 <FormInput
@@ -87,17 +94,16 @@ const Signup = () => {
                     name="password"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    isRequired
+                    // isRequired
                     type="password"
                     onFocus={onFocus}
-
                 />
                 <FormInput
                     label="Confirm Password"
                     name="confirmPassword"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    isRequired
+                    // isRequired
                     type="password"
                     onFocus={onFocus}
                 />

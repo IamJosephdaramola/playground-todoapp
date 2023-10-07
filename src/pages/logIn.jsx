@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { FormInput } from '../components';
 import Button from '../components/button';
 import { useAuthContextData } from '../hooks';
@@ -15,9 +16,9 @@ const Login = () => {
 
     const onFocus = () => {
         if (errorMsg) {
-            setErrorMsg('')
+            setErrorMsg('');
         }
-    }
+    };
 
     const onChange = (e) => {
         setDetails({
@@ -29,33 +30,30 @@ const Login = () => {
     const handleSubmit = async (e) => {
         const { password, email } = details;
         e.preventDefault();
-
-            if (!password || !email) {
-                setErrorMsg('Please fill in the fields');
-                return;
-            }
-        const {
-                error,
-            } = await login(email, password);
-
-        if (error) {
-            setErrorMsg(error.message);
+        if (!password || !email) {
+            toast.error('Please fill in the fields');
             return;
         }
+        const { error } = await login(email, password);
 
+        if (error) {
+            // setErrorMsg(error.message);
+            toast.error(error.message);
+            return;
+        }
         navigate('/');
-
+        toast.success('Welcome to your todo app');
     };
-   
+
     return (
         <form
             onSubmit={handleSubmit}
             className="pt-40 flex justify-center  pb-5"
         >
             <div className="">
-                {errorMsg && (
+                {/* {errorMsg && (
                     <p className="text-center text-red-600 my-4">{errorMsg}</p>
-                )}
+                )} */}
                 <div className="text-center">
                     <h2 className="text-[#000] mb-2 text-xl sm:text-[35px] font-bold">
                         Login to your account
@@ -71,7 +69,7 @@ const Login = () => {
                     onChange={onChange}
                     onFocus={onFocus}
                     type="email"
-                    isRequired
+                    // isRequired
                 />{' '}
                 <FormInput
                     label="Password"
@@ -80,7 +78,7 @@ const Login = () => {
                     onChange={onChange}
                     onFocus={onFocus}
                     type="password"
-                    isRequired
+                    // isRequired
                 />
                 <div className="grid justify-center sm:justify-start">
                     <Button text=" Login" />

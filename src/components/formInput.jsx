@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import PropTypes from 'prop-types';
 
-const FormInput = ({ label, name, placeholder, className, isRequired, onChange, type, onFocus }) => {
+const FormInput = ({ label, name, placeholder, className,  onChange, type, onFocus }) => {
     const id = useId();
 
     return (
@@ -16,7 +16,7 @@ const FormInput = ({ label, name, placeholder, className, isRequired, onChange, 
                     name={name}
                     placeholder={placeholder}
                     className="border-2 pl-2 py-2 w-[250px] sm:w-[478px] outline-none rounded-[4px]"
-                    required={isRequired}
+                    // required={isRequired}
                     onChange={onChange}
                     onFocus={onFocus}
                 />
@@ -28,7 +28,7 @@ FormInput.propTypes = {
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
-    isRequired: PropTypes.bool.isRequired,
+    // isRequired: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func,
     className: PropTypes.string,
