@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
 import { useAuthContextData } from '../hooks';
+import { logout } from '../store/auth/auth-thunks'
 
 export default function Navbar() {
+    const dispatch = useDispatch()
     const [showMenu, setShowMenu] = useState(false);
-    const { authenticated, logout } = useAuthContextData();
+    const { authenticated } = useAuthContextData();
 
     const navItems = authenticated
         ? [
@@ -41,6 +44,10 @@ export default function Navbar() {
     const closeMenu = () => {
         setShowMenu(false);
     };
+
+    const handleLogout = () => {
+        dispatch(logout())
+    }
 
     return (
         <div className="">
@@ -77,7 +84,7 @@ export default function Navbar() {
                             );
                         })}
                         {authenticated && (
-                            <button type="button" onClick={logout}>
+                            <button type="button" onClick={handleLogout}>
                                 Logout
                             </button>
                         )}
@@ -124,7 +131,7 @@ export default function Navbar() {
                             <button
                                 className="text-[18px]  px-2  text-todo-black"
                                 type="button"
-                                onClick={logout}
+                                onClick={handleLogout}
                             >
                                 Logout
                             </button>

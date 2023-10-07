@@ -1,9 +1,8 @@
-import { useContext } from "react"
-import { authContext } from "../store"
+
+import { useSelector } from 'react-redux'
 
 const useAuthContextData = () => {
-    const data = useContext(authContext);
-
+    const data = useSelector((state) => state.auth)
 
     return data;
 }

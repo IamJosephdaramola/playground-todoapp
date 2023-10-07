@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from 'react';
+import { createContext, useReducer, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useAuthContextData } from '../../hooks';
 import { supabase } from '../../super-base-client';
@@ -81,14 +81,18 @@ const TodosProvider = ({ children }) => {
         });
     };
 
+    const value = useMemo(() => {
+        return {
+            todos: state.todos,
+            onRemoveTodo,
+            onAddTodo,
+            onUpdateTodo,
+        }
+    }, [state])
+
     return (
         <todosContext.Provider
-            value={{
-                todos: state.todos,
-                onAddTodo,
-                onRemoveTodo,
-                onUpdateTodo,
-            }}
+            value={value}
         >
             {children}
         </todosContext.Provider>

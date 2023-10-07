@@ -1,4 +1,4 @@
 import { TodosProvider, todosContext } from "./todo/todos-context";
-import { AuthProvider, authContext } from "./auth/auth-context";
+import { store } from './store'
 
-export { TodosProvider, todosContext, AuthProvider, authContext }
+export { TodosProvider, todosContext, store }
