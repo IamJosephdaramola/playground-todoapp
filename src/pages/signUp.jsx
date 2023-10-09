@@ -1,24 +1,26 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormInput from '../components/formInput';
 import Button from '../components/button';
-import { supabase } from '../super-base-client';
+import { signUp } from '../store/auth/auth-thunks'
+import { validateValues } from '../utils';
+import { useAuthContextData } from '../hooks';
+
 
 const Signup = () => {
+    const { loading } = useAuthContextData();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [formError, setFormError] = useState('');
     const [details, setDetails] = useState({
         email: '',
         password: '',
         confirmPassword: '',
+        firstName: "",
+        lastName: ""
     });
 
-    const onFocus = () => {
-        if (formError) {
-            setFormError('');
-        }
-    };
 
     const onChange = (e) => {
         setDetails({
@@ -30,34 +32,22 @@ const Signup = () => {
    
     const onSubmit = async (e) => {
         e.preventDefault();
-        const { password, confirmPassword, email } = details;
-        if (!email || !password || !confirmPassword) {
+        const { confirmPassword, password } = details
+
+        if (validateValues(details)) {
+            if (confirmPassword !== password) {
+                toast.error('Passwords do not match');
+                return;
+            }
+            if (password.length < 6) {
+                toast.error('Password is too weak');
+                return;
+            }
+
+            dispatch(signUp({ details, navigate }))
+        } else {
             toast.error('Please fill in all fields');
-            return;
         }
-        if (confirmPassword !== password) {
-            toast.error('Passwords do not match');
-            return;
-        }
-        if (password.length < 6) {
-            toast.error('Password is too weak (min. 6 characters)');
-            return;
-        }
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${document.location.origin}/`,
-            },
-        });
-
-        if (error) {
-            toast.error(error.message);
-            return;
-        }
-
-        navigate('/verify-email', { state: { email: data.user.email } });
-        toast.success('Account created successfully');
     };
 
     return (
@@ -77,38 +67,43 @@ const Signup = () => {
                         </Link>
                     </p>
                 </div>
-                {formError && (
-                    <p className="text-center text-red-600 my-4">{formError}</p>
-                )}
+                <FormInput
+                    label="First name"
+                    name="firstName"
+                    placeholder="Enter your first name"
+                    onChange={onChange}
+                    type="text"
+                />
+                <FormInput
+                    label="Last name"
+                    name="lastName"
+                    placeholder="Enter your last name"
+                    onChange={onChange}
+                    type="text"
+                />
                 <FormInput
                     label="Email"
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    onFocus={onFocus}
-                    // isRequired
                     type="email"
-                />{' '}
+                />
                 <FormInput
                     label="Password"
                     name="password"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    // isRequired
                     type="password"
-                    onFocus={onFocus}
                 />
                 <FormInput
                     label="Confirm Password"
                     name="confirmPassword"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    // isRequired
                     type="password"
-                    onFocus={onFocus}
                 />
                 <div className="grid justify-center sm:justify-start">
-                    <Button text="Sign Up" />
+                    <Button text={loading ? "Loading..." : "Sign Up"} disabled={loading} />
                 </div>
             </div>
         </form>

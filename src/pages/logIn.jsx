@@ -1,24 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify';
 import { FormInput } from '../components';
 import Button from '../components/button';
 import { useAuthContextData } from '../hooks';
+import { login } from '../store/auth/auth-thunks'
+import { validateValues } from '../utils';
 
 const Login = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate();
-    const { login } = useAuthContextData();
+    const { loading } = useAuthContextData();
     const [details, setDetails] = useState({
         email: '',
         password: '',
     });
-    const [errorMsg, setErrorMsg] = useState('');
-
-    const onFocus = () => {
-        if (errorMsg) {
-            setErrorMsg('');
-        }
-    };
 
     const onChange = (e) => {
         setDetails({
@@ -30,19 +27,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         const { password, email } = details;
         e.preventDefault();
-        if (!password || !email) {
-            toast.error('Please fill in the fields');
-            return;
-        }
-        const { error } = await login(email, password);
 
-        if (error) {
-            // setErrorMsg(error.message);
-            toast.error(error.message);
-            return;
+        if (validateValues(details)) {
+            dispatch(login({ email, password, navigate }));
+        } else {
+            toast.error('Please fill in the fields');
         }
-        navigate('/');
-        toast.success('Welcome to your todo app');
+
     };
 
     return (
@@ -51,9 +42,6 @@ const Login = () => {
             className="pt-40 flex justify-center  pb-5"
         >
             <div className="">
-                {/* {errorMsg && (
-                    <p className="text-center text-red-600 my-4">{errorMsg}</p>
-                )} */}
                 <div className="text-center">
                     <h2 className="text-[#000] mb-2 text-xl sm:text-[35px] font-bold">
                         Login to your account
@@ -67,21 +55,17 @@ const Login = () => {
                     name="email"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    onFocus={onFocus}
                     type="email"
-                    // isRequired
                 />{' '}
                 <FormInput
                     label="Password"
                     name="password"
                     placeholder="Enter your name"
                     onChange={onChange}
-                    onFocus={onFocus}
                     type="password"
-                    // isRequired
                 />
                 <div className="grid justify-center sm:justify-start">
-                    <Button text=" Login" />
+                    <Button text={loading ? "Loading..." : "Login"} disabled={loading} />
                 </div>
                 <div>
                     <p className="text-todo-blue-2 text-center pt-5 font-[500] text-sm sm:text-[16px]">
