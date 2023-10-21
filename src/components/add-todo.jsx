@@ -1,15 +1,16 @@
 import { useState } from "react"
-import { useTodosContextData } from "../hooks";
+import { useDispatch } from "react-redux";
+import { onAddTodo } from "../store/todo/todos-thunks";
 
 
 const AddTodo = () => {
-    const { onAddTodo } = useTodosContextData();
+    const dispatch = useDispatch()
     const [value, setValue] = useState('');
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        onAddTodo(value)
+        dispatch(onAddTodo(value))
         setValue('')
     }
 

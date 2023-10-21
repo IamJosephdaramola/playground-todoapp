@@ -1,18 +1,18 @@
 import { useState, Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BiSolidTrash } from 'react-icons/bi'
 import { AiFillEdit } from 'react-icons/ai'
-import { useTodosContextData } from "../hooks";
+import { onRemoveTodo, onUpdateTodo } from '../store/todo/todos-thunks';
 import EditTodo from './edit-todo';
 
 const Todo = ({ todo }) => {
-
-    const { onUpdateTodo, onRemoveTodo } = useTodosContextData();
+    const dispatch = useDispatch();
     const { id, value } = todo;
     const [editMode, setEditMode] = useState(false)
 
-    const onSave = (updatedValue) => {
-        onUpdateTodo(id, updatedValue)
+    const onSave = (newValue) => {
+        dispatch(onUpdateTodo({ todoId: id, newValue }))
         setEditMode(false)
     };
 
@@ -37,7 +37,7 @@ const Todo = ({ todo }) => {
                             />
                             <BiSolidTrash
                                 className="text-rose-700 text-sm cursor-pointer"
-                                onClick={() => onRemoveTodo(id)}
+                                    onClick={() => dispatch(onRemoveTodo(id))}
                             />
                         </div>
                     </Fragment>

@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
-import { useAuthContextData } from '../hooks';
+import { getAuthenticated } from '../store/auth/auth-selectors';
 import { logout } from '../store/auth/auth-thunks'
 
 export default function Navbar() {
     const dispatch = useDispatch()
+    const authenticated = useSelector(getAuthenticated);
     const [showMenu, setShowMenu] = useState(false);
-    const { authenticated } = useAuthContextData();
 
     const navItems = authenticated
         ? [

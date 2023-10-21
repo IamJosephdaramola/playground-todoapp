@@ -1,17 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
+import { getIsAuthLoading } from '../store/auth/auth-selectors';
+import { login } from '../store/auth/auth-thunks'
 import { FormInput } from '../components';
 import Button from '../components/button';
-import { useAuthContextData } from '../hooks';
-import { login } from '../store/auth/auth-thunks'
 import { validateValues } from '../utils';
 
 const Login = () => {
-    const dispatch = useDispatch()
     const navigate = useNavigate();
-    const { loading } = useAuthContextData();
+    const dispatch = useDispatch()
+    const loading = useSelector(getIsAuthLoading)
     const [details, setDetails] = useState({
         email: '',
         password: '',

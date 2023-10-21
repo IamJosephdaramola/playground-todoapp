@@ -1,8 +1,16 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../store/auth/auth-selectors';
 import { TodosContainer, AddTodo } from '../components/index';
-import { useAuthContextData } from "../hooks";
+import { fetchTodos } from '../store/todo/todos-thunks';
 
 const Home = () => {
-    const { user } = useAuthContextData()
+    const dispatch = useDispatch();
+    const user = useSelector(getUser);
+
+    useEffect(() => {
+        dispatch(fetchTodos());
+    }, [])
 
     const name = `${user.user_metadata.first_name} ${user.user_metadata.last_name[0].toUpperCase()}.`
 
