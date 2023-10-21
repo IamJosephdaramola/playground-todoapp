@@ -28,7 +28,7 @@ const Signup = () => {
         });
     };
 
-   
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const { confirmPassword, password } = details

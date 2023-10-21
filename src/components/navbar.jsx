@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
-import { getAuthenticated } from '../store/auth/auth-selectors';
 import { logout } from '../store/auth/auth-thunks'
+import { getAuthenticated } from '../store/auth/auth-selectors';
 
 export default function Navbar() {
     const dispatch = useDispatch()
@@ -13,29 +13,29 @@ export default function Navbar() {
 
     const navItems = authenticated
         ? [
-              {
-                  title: 'Home',
-                  link: '/',
-              },
-              {
-                  title: 'About',
-                  link: 'about',
-              },
-          ]
+            {
+                title: 'Home',
+                link: '/',
+            },
+            {
+                title: 'About',
+                link: 'about',
+            },
+        ]
         : [
-              {
-                  title: 'About',
-                  link: 'about',
-              },
-              {
-                  title: 'Sign Up',
-                  link: 'signup',
-              },
-              {
-                  title: 'Login',
-                  link: 'login',
-              },
-          ];
+            {
+                title: 'About',
+                link: 'about',
+            },
+            {
+                title: 'Sign Up',
+                link: 'signup',
+            },
+            {
+                title: 'Login',
+                link: 'login',
+            },
+        ];
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -92,9 +92,8 @@ export default function Navbar() {
                 </div>
             </div>
             <div
-                className={`fixed z-20 inset-0 transform transition-transform duration-500 ease-in-out md:hidden  ${
-                    showMenu ? 'translate-x-0' : '-translate-x-full'
-                }`}
+                className={`fixed z-20 inset-0 transform transition-transform duration-500 ease-in-out md:hidden  ${showMenu ? 'translate-x-0' : '-translate-x-full'
+                    }`}
             >
                 <div className="bg-white shadow-md rounded-b-3xl w-full flex flex-col">
                     <div className="flex justify-between items-center p-4 shadow-sm">

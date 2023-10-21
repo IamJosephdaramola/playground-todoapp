@@ -9,8 +9,8 @@ import Button from '../components/button';
 import { validateValues } from '../utils';
 
 const Login = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     const loading = useSelector(getIsAuthLoading)
     const [details, setDetails] = useState({
         email: '',
