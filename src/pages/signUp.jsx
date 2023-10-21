@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getIsAuthLoading } from '../store/auth/auth-selectors';
+import { signUp } from '../store/auth/auth-thunks'
 import FormInput from '../components/formInput';
 import Button from '../components/button';
-import { signUp } from '../store/auth/auth-thunks'
 import { validateValues } from '../utils';
-import { useAuthContextData } from '../hooks';
-
 
 const Signup = () => {
-    const { loading } = useAuthContextData();
+    const loading = useSelector(getIsAuthLoading);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [details, setDetails] = useState({
@@ -29,7 +28,7 @@ const Signup = () => {
         });
     };
 
-   
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const { confirmPassword, password } = details

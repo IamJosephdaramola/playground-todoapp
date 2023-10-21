@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TodosProvider, store } from './store';
+import { store } from './store/store';
 import { getSession } from './store/auth/auth-thunks';
 import App from './App';
 import './index.css';
@@ -26,9 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 pauseOnHover
             />
             <Provider store={store}>
-                <TodosProvider>
-                    <App />
-                </TodosProvider>
+                <App />
             </Provider>
         </BrowserRouter>
     </React.StrictMode>,

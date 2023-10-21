@@ -60,7 +60,7 @@ const signUp = createAsyncThunk('auth/signUp', async ({ details, navigate }, thu
         });
 
         if (error) {
-            toast.error(error.message);
+            toast.error('Something went wrong');
             return;
         }
 
