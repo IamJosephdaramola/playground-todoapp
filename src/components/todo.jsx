@@ -1,22 +1,22 @@
 import { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { BiSolidTrash } from 'react-icons/bi'
-import { AiFillEdit } from 'react-icons/ai'
-import { useTodosContextData } from "../hooks";
+import { BiSolidTrash } from 'react-icons/bi';
+import { AiFillEdit } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { onUpdateTodo, onRemoveTodo } from '../store/todo/todo-thunks';
 import EditTodo from './edit-todo';
 
 const Todo = ({ todo }) => {
-
-    const { onUpdateTodo, onRemoveTodo } = useTodosContextData();
     const { id, value } = todo;
-    const [editMode, setEditMode] = useState(false)
+    const [editMode, setEditMode] = useState(false);
+    const dispatch = useDispatch();
 
     const onSave = (updatedValue) => {
-        onUpdateTodo(id, updatedValue)
-        setEditMode(false)
+        dispatch(onUpdateTodo({ id, newValue: updatedValue }));
+        setEditMode(false);
     };
 
-    const undoChanges = () => setEditMode(false)
+    const undoChanges = () => setEditMode(false);
 
     return (
         <ul className="flex justify-center ">
@@ -30,14 +30,14 @@ const Todo = ({ todo }) => {
                 ) : (
                     <Fragment>
                         <span>{value}</span>
-                        <div className='flex gap-4'>
+                        <div className="flex gap-4">
                             <AiFillEdit
                                 className="text-blue-600 text-sm cursor-pointer"
                                 onClick={() => setEditMode(true)}
                             />
                             <BiSolidTrash
                                 className="text-rose-700 text-sm cursor-pointer"
-                                onClick={() => onRemoveTodo(id)}
+                                onClick={() => dispatch(onRemoveTodo(id))}
                             />
                         </div>
                     </Fragment>
@@ -45,13 +45,13 @@ const Todo = ({ todo }) => {
             </li>
         </ul>
     );
-}
+};
 
 Todo.propTypes = {
     todo: PropTypes.shape({
         id: PropTypes.string.isRequired,
         value: PropTypes.string.isRequired,
     }).isRequired,
-}
+};
 
-export default Todo
+export default Todo;

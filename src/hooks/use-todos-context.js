@@ -1,11 +1,8 @@
-import { useContext } from "react"
-import { todosContext } from "../store"
+import { useSelector } from 'react-redux';
 
 const useTodosContextData = () => {
-    const data = useContext(todosContext);
-
-
+    const data = useSelector((state) => state.todo);
     return data;
-}
+};
 
-export { useTodosContextData }
+export { useTodosContextData };

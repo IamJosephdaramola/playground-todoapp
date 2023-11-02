@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TodosProvider, store } from './store';
+import { store } from './store';
 import { getSession } from './store/auth/auth-thunks';
 import App from './App';
 import './index.css';
 
-store.dispatch(getSession())
+store.dispatch(getSession());
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -26,9 +26,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 pauseOnHover
             />
             <Provider store={store}>
-                <TodosProvider>
-                    <App />
-                </TodosProvider>
+                {/* <TodosProvider> */}
+                <App />
+                {/* </TodosProvider> */}
             </Provider>
         </BrowserRouter>
     </React.StrictMode>,
